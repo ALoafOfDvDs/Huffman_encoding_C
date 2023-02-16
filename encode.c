@@ -23,7 +23,6 @@
 
 
 extern uint64_t buffer_index;
-// extern bool reset;
 // The print tree function was written by Prof. Long
 void spaces(int space) {
     int counter = 0;
@@ -35,8 +34,6 @@ void spaces(int space) {
 }
 
 void printTree(Node *t, int depth) {
-    // return;
-    // printf("%p\n", (void *) t);
     if (t) {
         printTree(t->left, depth + 1);
         spaces(4 * depth);
@@ -60,8 +57,6 @@ int main(int argc, char **argv) {
     int input_fd = STDIN_FILENO;
     int output_fd = STDOUT_FILENO;
     bool stats = false;
-    // const char * input_name;
-    // const char * output_name;
     int opt = 0;
 
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
@@ -98,12 +93,9 @@ int main(int argc, char **argv) {
 
     int temp_fd = fileno(temp);
     static uint8_t letter;
-    // reset = false;
     while (read_bytes(input_fd, &letter, 1) ) {
         write_bytes(temp_fd, &letter, 1);
     }
-    // lseek(temp_fd, 0, SEEK_SET);
-    // reset = true;
     lseek(temp_fd, 0, SEEK_SET);
 
     // I have to handle files like this since I start with stdin and stdout and those are already FILE * datatypes
@@ -127,23 +119,12 @@ int main(int argc, char **argv) {
     if(hist[1] == 0) {
         hist[1] = 1;
     }
-    // reset = true;
     lseek(temp_fd, 0, SEEK_SET);
     Node * root = build_tree(hist);
-
-    // printTree(root, 0);
 
 
     Code c[ALPHABET] = {0};
     build_codes(root, c); 
-
-    // debugging print statement
-    // for (uint32_t i = 0; i < ALPHABET; i += 1) {
-    //     if(hist[i]) {
-    //         fprintf(stderr, "got here for code %c\n", i);
-    //         code_print(&(c[i]));
-    //     }
-    // }
 
     // handling file permissions and other things
     Header header;
@@ -161,7 +142,6 @@ int main(int argc, char **argv) {
             uniq_sym += 1;
         }
     }
-    //fprintf(stderr, "%");
     header.tree_size = (3 * uniq_sym) - 1;
     header.file_size = file_stats.st_size;
     bytes_written = 0;
@@ -188,7 +168,6 @@ int main(int argc, char **argv) {
         fprintf(stderr, "Space saving: %.2f%%\n", space);
     }
     fclose(temp);
-    // close(temp_fd);
     close(input_fd);
     close(output_fd);
     delete_tree(&root);

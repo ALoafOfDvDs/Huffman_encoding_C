@@ -15,13 +15,11 @@
 #include <fcntl.h>
 #include <inttypes.h>
 #include <ctype.h>
-// #include <>
 //clang-format on
 
 #define OPTIONS "hi:o:v"
 
-// uint64_t bytes_read;
-// uint64_t bytes_written;
+
 
 void spaces(int space) {
     int counter = 0;
@@ -33,8 +31,6 @@ void spaces(int space) {
 }
 // this print tree function was given by Prof. Long in discord and was used for debugging
 void printTree(Node *t, int depth) {
-    // return;
-    // printf("%p\n", (void *) t);
     if (t) {
         printTree(t->left, depth + 1);
         spaces(4 * depth);
@@ -115,42 +111,26 @@ int main(int argc, char **argv) {
     read_bytes(input_fd, tree_array, header.tree_size);
 
     Node * root = rebuild_tree(header.tree_size, tree_array);
-    // fprintf(stderr, "looping here\n");
-
-
-    // printTree(root, 0);
 
     uint64_t num_decoded = 0;
     Node * current_node = root;
-    
-    // uint8_t symbol;
-    // uint32_t byte_counter = 0;
+
     uint8_t bit;
     while(num_decoded < header.file_size) {
         
         if(read_bit(input_fd, &bit)) {
-            // fprintf(stderr, "bit: %u\nprinting node: \n", bit);
-            // node_print(current_node);
-            // fprintf(stderr, "%u ", bit);
             if (current_node->left == NULL && current_node->right == NULL) {
-                // symbol = current_node->symbol;
                 write_bytes(output_fd, &current_node->symbol, 1);
                 current_node = root;
                 num_decoded += 1;
-                // fprintf(stderr, "\n");
             }
             if(bit == 0) {
-                // fprintf(stderr, "moving left down tree\n");
                 current_node = current_node->left;
             }
             else if (bit == 1){
-                // fprintf(stderr, "moving right down tree\n");
                 current_node = current_node->right;
             }
         }
-        // else {
-        //     break;
-        // }
         
     }
 

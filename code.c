@@ -5,13 +5,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 //clang-format on
-// typedef struct {
-//     uint32_t top;
-//     uint8_t bits[MAX_CODE_SIZE];
-// } Code;
+
 
 Code code_init(void) { // Note that due to my implementation of this I will need to call free(&CodeVar) on this later whenever i declare it
-    Code code; // = (Code *)malloc(sizeof(Code));
+    Code code; 
     code.top = 0;
     for (uint32_t i = 0; i < MAX_CODE_SIZE; i += 1) {
         code.bits[i] = 0;
@@ -44,13 +41,6 @@ bool code_set_bit(Code *c, uint32_t i) {
 
 bool code_clr_bit(Code *c, uint32_t i) {
     if (i >= 0 && i < c->top) {
-        // uint8_t counter = 0;
-        // for (uint8_t j = 0; j < 8; j +=1) {
-        //     if(j != i % 8) {
-        //         counter += (1 << j);
-        //     }
-        // }
-        // c->bits[i / 8] &= counter;
 
         // new code courtesy of Lev
 
@@ -65,7 +55,6 @@ bool code_clr_bit(Code *c, uint32_t i) {
 
 bool code_get_bit(Code *c, uint32_t i) {
     if (i >= 0 && i < c->top) {
-        // uint8_t val = (1 << (i % 8));
         return c->bits[i] & 0x1; 
     }
     else {
@@ -82,8 +71,6 @@ bool code_push_bit(Code *c, uint8_t bit) {
     else {
         c->top += 1;
         c->bits[c->top - 1] = bit;
-        // uint32_t index = c->top - 1;
-        // c->bits[index / 8] |= (bit << (index%8)); // I think this should work
         return true;
     }
     
@@ -115,7 +102,6 @@ bool code_pop_bit(Code *c, uint8_t *bit) {
 
 void code_print(Code *c) {
     for (uint32_t i = 0; i < MAX_CODE_SIZE && c->bits[i]; i += 1) {
-        // fprintf(stderr, "bit %u: %u\n", i, c->bits[i]);
         fprintf(stderr, "bit %u:\n", i);
         for(uint16_t j = 0; j < c->top; j += 1) {
             fprintf(stderr, "%u", (((c->bits[i / 8]) & (1 << (c->top - j))) >> (c->top - j)));

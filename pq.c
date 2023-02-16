@@ -110,11 +110,9 @@ void pq_delete(PriorityQueue **q) {
         free((*q)->array);
         free(*q);
         *q = NULL;
-        // fprintf(stderr, "deleting PQ\n");
     }
     else {
         // we should really only ever get here since we want to run until the queue is equal to 1 cuz thats when the tree is built
-        // fprintf(stderr, "deleting PQ\n");
         free((*q)->array);
         free(*q);
         *q = NULL;
@@ -150,10 +148,6 @@ bool enqueue(PriorityQueue *q, Node *n) {
         }
         up_heap(q->array, q->size_used);
         q->size_used += 1;
-
-        // uint32_t size = pq_size(q);
-        // q->array[size - 1] = n;
-        // insertion(q);
         return true;
     }
 
@@ -165,18 +159,10 @@ bool dequeue(PriorityQueue *q, Node **n) {
     }
     else {
         *n = (q->array[0]);
-        // Node * left = q->array[0]->left;
-        // Node * right = q->array[0]->right;
         q->array[0] = q->array[q->size_used - 1];
-        // q->array[0]->left = left;
-        // q->array[0]->right = right;
         q->array[q->size_used-1] = NULL;
         q->size_used -= 1;
-        // insertion(q);
         down_heap(q->array, q->size_used);
-        // *n = q->array[0];
-        // q->array[0] = q->array[q->size_used - 1];
-        // q->size_used -= 1;
         return true;
     }
 
